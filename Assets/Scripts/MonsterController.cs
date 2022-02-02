@@ -27,4 +27,8 @@ public class MonsterController : MonoBehaviour {
     public void Spawn(Transform monsterPos) {
         Instantiate(gameObject, monsterPos.position, monsterPos.rotation);
     }
+
+    public void DestroyMonster() {
+        Destroy(gameObject);
+    }
 }

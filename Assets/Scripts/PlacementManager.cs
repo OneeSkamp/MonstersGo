@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -53,36 +52,43 @@ public class PlacementManager : MonoBehaviour {
             return;
         }
 
-        RaycastHit hit;
-        var touchRaycast = Physics.Raycast(mainCamera.ScreenPointToRay(touch.position), out hit);
-
-        if (hit.transform.gameObject != null) {
+        if (Physics.Raycast(mainCamera.ScreenPointToRay(touch.position), out RaycastHit hit)) {
             if (hit.transform.GetComponent<MonsterController>() != null) {
                 var monsterController = hit.transform.GetComponent<MonsterController>();
-                // string fileName = "out.txt";
-                // StreamWriter f = new StreamWriter(Application.persistentDataPath + "\\Save.txt");
+                var animator = hit.transform.GetComponent<Animator>();
+                animator.SetBool("TakeDmg", true);
+                animator.SetBool("takeDmg", false);
+
+                var monsterType = "";
                 switch (monsterController.rarity) {
                     case Rarity.Rare:
-                        File.AppendAllText(Application.persistentDataPath + "\\Save.txt", "0" + Environment.NewLine);
-                        // collectionController.rareMonsters.Add(Instantiate(hit.transform.gameObject));
+                        monsterType = "0";
                         break;
                     case Rarity.Epic:
-                        File.AppendAllText(Application.persistentDataPath + "\\Save.txt", "1" + Environment.NewLine);
-                        // collectionController.epicMonsters.Add(Instantiate(hit.transform.gameObject));
+                        monsterType = "1";
                         break;
                     case Rarity.Legendary:
-                        File.AppendAllText(Application.persistentDataPath + "\\Save.txt", "2" + Environment.NewLine);
-                        // collectionController.legendaryMonsters.Add(Instantiate(hit.transform.gameObject));
+                        monsterType = "2";
                         break;
                 }
-                Destroy(hit.transform.gameObject);
+
+                File.AppendAllText(
+                    Application.persistentDataPath + "\\Save.txt",
+                    monsterType + Environment.NewLine
+                );
             }
         }
     }
 
     public void RandomSpawn(List<GameObject> monsters, Pose pose) {
         var rand = UnityEngine.Random.Range(0, monsters.Count);
-        var quat = new Quaternion(pose.rotation.x, pose.rotation.y + 180f, pose.rotation.z, pose.rotation.w);
+        var quat = new Quaternion(
+            pose.rotation.x,
+            pose.rotation.y + 180f,
+            pose.rotation.z,
+            pose.rotation.w
+        );
+
         Instantiate(monsters[0], pose.position, quat);
     }
 }
