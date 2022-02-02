@@ -17,7 +17,7 @@ public class CollectionController : MonoBehaviour {
     public GameObject currentMonster;
 
     public void FillCollection() {
-        string[] arStr =  File.ReadAllLines(Application.persistentDataPath + "\\Save.txt");
+        string[] arStr =  File.ReadAllLines(Path.Combine(Application.persistentDataPath, "Save.txt"));
 
         foreach (var str in arStr) {
             switch (str) {
