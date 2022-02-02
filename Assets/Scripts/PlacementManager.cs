@@ -73,7 +73,7 @@ public class PlacementManager : MonoBehaviour {
                 }
 
                 File.AppendAllText(
-                    Application.persistentDataPath + "\\Save.txt",
+                   Path.Combine(Application.persistentDataPath, "Save.txt"),
                     monsterType + Environment.NewLine
                 );
             }
