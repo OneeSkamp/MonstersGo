@@ -22,13 +22,13 @@ public class CollectionController : MonoBehaviour {
         foreach (var str in arStr) {
             switch (str) {
                 case "0":
-                    rareMonsters.Add(Instantiate(allMonsters[0]));
+                    rareMonsters.Add(allMonsters[0]);
                     break;
                 case "1":
-                    rareMonsters.Add(Instantiate(allMonsters[1]));
+                    epicMonsters.Add(allMonsters[1]);
                     break;
                 case "2":
-                    rareMonsters.Add(Instantiate(allMonsters[2]));
+                    legendaryMonsters.Add(allMonsters[2]);
                     break;
             }
         }
@@ -45,19 +45,18 @@ public class CollectionController : MonoBehaviour {
             var btn = Instantiate(monsterButton, collectionTransform);
             btn.image.sprite = monsterController.icon;
             btn.onClick.AddListener(() => SpawnMonster(monster));
-            // monsterController.enabled = false;
-            // FileStream aFile = new FileStream(Application.persistentDataPath + "Save.txt", FileMode.OpenOrCreate);
-            // StreamReader sw = new StreamReader(aFile);
-            // StreamReader sr = new StreamReader(Application.persistentDataPath + "Save.txt");
-            // while (!sr.EndOfStream) {
-            // // line = sr.ReadLine();
-            // //бла-бла-бла
-            // }
-            // sr.Close();
         }
     }
 
+    public void CleanCollectionFromList(List<GameObject> collection) {
+        collection.Clear();
+    }
+
     public void CleanCollection() {
+        CleanCollectionFromList(rareMonsters);
+        CleanCollectionFromList(epicMonsters);
+        CleanCollectionFromList(legendaryMonsters);
+
         foreach (Transform item in collectionTransform) {
             Destroy(item.gameObject);
         }

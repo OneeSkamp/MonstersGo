@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -6,11 +7,7 @@ using UnityEngine;
 public class LoadController : MonoBehaviour {
 
     public void save() {
-                StreamWriter f = new StreamWriter(Application.persistentDataPath + "\\Save1.txt");
-
-                        f.WriteLine("0");
-                        f.Close();
-
+                File.AppendAllText(Application.persistentDataPath + "\\Save1.txt", "0" + Environment.NewLine);
     }
 
     public void load() {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.XR.ARSubsystems;
 
 public class PlacementManager : MonoBehaviour {
     public Camera mainCamera;
-    public ARRaycastManager RaycastManager;
+    public ARRaycastManager raycastManager;
 
     public List<GameObject> rareMonsters;
     public List<GameObject> epicMonsters;
@@ -22,15 +23,15 @@ public class PlacementManager : MonoBehaviour {
         timer += Time.deltaTime;
 
         var hits = new List<ARRaycastHit>();
-        var raycast = RaycastManager.Raycast(
+        var raycast = raycastManager.Raycast(
             new Vector2(Screen.width / 2, Screen.height / 2),
             hits,
-            TrackableType.Planes
+            TrackableType.PlaneWithinPolygon
         );
 
         if (hits.Count > 0) {
             if (timer > duration) {
-                var randomValue = Random.Range(0, 101);
+                var randomValue = UnityEngine.Random.Range(0, 101);
                 if (randomValue < 70) {
                     RandomSpawn(rareMonsters, hits[0].pose);
                 }
@@ -59,32 +60,28 @@ public class PlacementManager : MonoBehaviour {
             if (hit.transform.GetComponent<MonsterController>() != null) {
                 var monsterController = hit.transform.GetComponent<MonsterController>();
                 // string fileName = "out.txt";
-                StreamWriter f = new StreamWriter(Application.persistentDataPath + "\\Save.txt");
+                // StreamWriter f = new StreamWriter(Application.persistentDataPath + "\\Save.txt");
                 switch (monsterController.rarity) {
                     case Rarity.Rare:
-                        f.WriteLine("0");
-                        f.Close();
+                        File.AppendAllText(Application.persistentDataPath + "\\Save.txt", "0" + Environment.NewLine);
                         // collectionController.rareMonsters.Add(Instantiate(hit.transform.gameObject));
                         break;
                     case Rarity.Epic:
-                        f.WriteLine("1");
-                        f.Close();
+                        File.AppendAllText(Application.persistentDataPath + "\\Save.txt", "1" + Environment.NewLine);
                         // collectionController.epicMonsters.Add(Instantiate(hit.transform.gameObject));
                         break;
                     case Rarity.Legendary:
-                        f.WriteLine("2");
-                        f.Close();
+                        File.AppendAllText(Application.persistentDataPath + "\\Save.txt", "2" + Environment.NewLine);
                         // collectionController.legendaryMonsters.Add(Instantiate(hit.transform.gameObject));
                         break;
                 }
-                f.Close();
                 Destroy(hit.transform.gameObject);
             }
         }
     }
 
     public void RandomSpawn(List<GameObject> monsters, Pose pose) {
-        var rand = Random.Range(0, monsters.Count);
+        var rand = UnityEngine.Random.Range(0, monsters.Count);
         var quat = new Quaternion(pose.rotation.x, pose.rotation.y + 180f, pose.rotation.z, pose.rotation.w);
         Instantiate(monsters[0], pose.position, quat);
     }
