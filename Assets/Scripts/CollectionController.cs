@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class CollectionController : MonoBehaviour {
     public Transform monsterPos;
+    public Transform stand;
     public Transform collectionTransform;
     public Button monsterButton;
 
@@ -66,6 +67,7 @@ public class CollectionController : MonoBehaviour {
         if (monster != currentMonster && monster != null) {
             Destroy(currentMonster);
             currentMonster = Instantiate(monster, monsterPos.position, monsterPos.rotation);
+            currentMonster.transform.SetParent(stand);
         }
     }
 }

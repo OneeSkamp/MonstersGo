@@ -22,6 +22,8 @@ public class MonsterController : MonoBehaviour {
         if (timer > duration) {
             Destroy(gameObject);
         }
+
+        
     }
 
     public void Spawn(Transform monsterPos) {
